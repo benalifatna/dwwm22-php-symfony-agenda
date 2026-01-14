@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau contacts{% endblock %}
+{% block title %}Modifier ce contact{% endblock %}
 
-{% block description %}Ajouter un nouveau contact à la liste{% endblock %}
+{% block description %}Modifier ce contact à la liste{% endblock %}
 
-{% block keywords %}nouveau, contacts{% endblock %}
+{% block keywords %}modifier, contact{% endblock %}
 
 {% block main %}
-    <h1 class="text-center display-5 my-3"> Nouveau contact</h1>
+    <h1 class="text-center display-5 my-3"> Modifier ce contact</h1>
 
     <div class="container">
         <div class="row">
@@ -40,7 +40,7 @@
                     {{form_widget(form.comment, {'attr': {'class': 'form-control', 'rows': 4}})}}
                 </div>
                 <div>
-                    <input formnovalidate type="submit" class="btn btn-primary w-100 shadow" value="Ajouter">
+                    <input formnovalidate type="submit" class="btn btn-primary w-100 shadow" value="Modifier">
                 </div>
             {{form_end(form)}}
             </div>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Form\ContactFormType;
+use App\Repository\ContactRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,9 +14,15 @@ use Symfony\Component\HttpFoundation\Request;
 final class ContactController extends AbstractController
 {
     #[Route('/', name: 'app_contact_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(ContactRepository $contactRepository): Response
     {
+        // La méthode findAll permet de récuperer la liste de tous les contacts de la base de donnée sous forme de tableau
+        $contacts = $contactRepository->findAll();
+
+        // passer le tableau des contacts à la vue pour affichage
         return $this->render('contact/index.html.twig', [
+
+            "contacts" => $contacts
             // 'controller_name' => 'ContactController',
         ]);
     }
@@ -45,13 +52,47 @@ final class ContactController extends AbstractController
 
             // 8. Effectuer une redirection vers la page d'accueil
                 // Puis arrêter l'exécusion du script
-                $this->redirectToRoute('app_contact_index');
+            return $this->redirectToRoute('app_contact_index');
 
         }
 
         // 3. Passer la partie visible du formulaire à la vue pour affichage
         return $this->render('contact/create.html.twig', [
             "form" => $form->createView()
+        ]);
+    }
+
+    #[Route('/contact/edit/{id}', name: 'app_contact_edit', methods:['GET','POST'])]
+    public function edit(Contact $contact, Request $request, EntityManagerInterface $entityManager ): Response {
+
+        // 1. une fois le contact récuperé 
+        // 2. Crée le formulaire de modification qui lui est associé
+
+        $form = $this->createForm(ContactFormType::class, $contact);
+
+         // 4. Associer au formulaire les données de la requête
+        $form->handleRequest($request);
+
+         // 5. Si le formulaire est soumis et validé
+         if ($form->isSubmitted() && $form->isValid()) {
+
+            // 6.  Alors effectuer la requete de modification du contact en base de données
+            $entityManager->persist($contact); // préparer le requête de modif des infos en base de données
+            $entityManager->flush(); // Exécuter la requête
+
+            // 7. Générer le message flash de succès de l'opération
+            $this->addFlash('success', 'Le contact a été modifié à la liste.');
+
+            // 8. Effectuer une redirction vers la route menant à la page d'accueil
+                // Puis, arrêter l'exécution du script
+            return $this->redirectToRoute('app_contact_index');
+         }
+
+        // 3. Passer la partie visible du formulaire à la vue pour affichage
+
+        return $this->render('contact/edit.html.twig', [
+            "form" => $form->createView(),
+            "contact" => $contact
         ]);
     }
 }
