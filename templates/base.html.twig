@@ -18,8 +18,25 @@
         
 
     {# Jquery#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    {# Google Font#}
+    {# DataTables #}
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.3.6/datatables.min.css" rel="stylesheet" integrity="sha384-Op52dEl5kUgSEZdHZBipbmlFw81qZygnw1QZv+p1KFhUsirA7OJQnkaHgcJmXCTj" crossorigin="anonymous">
+ 
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.3.6/datatables.min.js" integrity="sha384-h8drA99ZjRhIv1cyWeNleFRr89bNrnvYdIG5Rc523s5jZLUmObH2k1ZxR8ldNEvJ" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready( function () {
+            $('#myTable').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/2.3.6/i18n/fr-FR.json',
+                }
+            });
+        } );
+            
+    </script>
+
+    {# Google Font #}
 
     {# Font  AWESOME #}
     
@@ -28,11 +45,11 @@
 
 </head>
 
-<body>
+<body class="bg-light">
     {# Nav #}
     
     <nav class="bg-dark shadow py-2 text-center">
-        <a href="" class="text-decoration-none text-white fs-4">Agenda</a>
+        <a href="{{path('app_contact_index')}}" class="text-decoration-none text-white fs-4">Agenda</a>
     </nav>
 
     {# Main: The specific content for each oage #}

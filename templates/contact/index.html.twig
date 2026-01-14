@@ -14,8 +14,8 @@
     </div>
 
   {# read and display just one flash message type #}
-{% for message in app.flashes('notice') %}
-    <div class="flash-notice">
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success text-center" role="alert">
         {{ message }}
     </div>
 {% endfor %}
@@ -23,14 +23,13 @@
 {% if contacts|length > 0 %}
     {# Affichage du tableau #}
     <div class="table-responsive">
-        <table class="table table-striped table-hover table-bordered">
+        <table id="myTable" class="table table-striped table-hover table-bordered">
             <thead class="table-dark">
                 <tr>
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>Email</th>
-                <th>Télephone</th>
-                <th>Commentaires</th>
+                <th>Téléphone</th>
                 <th>Options</th>
 
                 </tr>
@@ -42,11 +41,15 @@
                 <td>{{contact.lastName}}</td>
                 <td>{{contact.email}}</td>
                 <td>{{contact.phone}}</td>
-                <td>{{contact.comment}}</td>
-                <td>
-                
-                    <a href="{{path('app_contact_edit',{'id':contact.id})}}" class="btn btn-sm btn-secondary">Modifier</a>
-                    <a href="" class="btn btn-sm btn-danger">Supprimer</a>
+                <td class="d-flex justify-content-center align-items-center gap-2">
+                    <a href="{{path('app_contact_show', {'id':contact.id})}}" class="btn btn-sm btn-dark">Lire</a>
+                    <a href="{{path('app_contact_edit', {'id':contact.id})}}" class="btn btn-sm btn-secondary">Modifier</a>
+                    <form action="{{path('app_contact_delete', {'id':contact.id})}}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{csrf_token('contact_'~contact.id)}}">
+                        <input type="submit" class="btn btn-sm btn-danger" value="Supprimer" onclick="return confirm('Confirmer la suppression?')">
+                        {# <a href="" class="btn btn-sm btn-danger">Supprimer</a> #}
+                    </form>
+                    
                 </td>
                 </tr>
 
@@ -57,7 +60,7 @@
     </div>
 
 {% else %}
-    <p class="mt-5">Aucun contact dans la liste.</p>
+    <p class="mt-5 text-center">Aucun contact dans la liste.</p>
 {% endif %}
     
 {% endblock %}

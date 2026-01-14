@@ -62,6 +62,14 @@ final class ContactController extends AbstractController
         ]);
     }
 
+    #[Route('/contact/show/{id}', name: 'app_contact_show', methods:['GET'])]
+    public function show(Contact $contact): Response {
+        
+        return $this->render('contact/show.html.twig', [
+            "contact"=> $contact
+        ]);
+    }
+
     #[Route('/contact/edit/{id}', name: 'app_contact_edit', methods:['GET','POST'])]
     public function edit(Contact $contact, Request $request, EntityManagerInterface $entityManager ): Response {
 
@@ -94,5 +102,18 @@ final class ContactController extends AbstractController
             "form" => $form->createView(),
             "contact" => $contact
         ]);
+    }
+
+    #[Route('/contact/delete/{id}', name: 'app_contact_delete', methods: ['POST'])]
+    public function delete(Contact $contact, Request $request,EntityManagerInterface $entityManager): Response {
+        // dd($contact);
+        if ($this->isCsrfTokenValid("contact_{$contact->getId()}", $request->request->get('csrf_token'), )) {
+            $entityManager->remove($contact);
+            $entityManager->flush();
+
+            $this->addFlash('success', "Le contact a été supprimé");
+        }
+
+        return $this->redirectToRoute('app_contact_index');
     }
 }
